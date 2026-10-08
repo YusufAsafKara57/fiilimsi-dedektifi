@@ -43,6 +43,7 @@
                     <p class="text-slate-400 text-sm">Her dosya artan zorluk derecesine ve kilitli ipuçlarına sahiptir.</p>
                 </div>
                 
+                <!-- Bölümlerin listelendiği grid alanı buraya eklendi -->
                 <div id="chapters-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto pr-2">
                     <!-- Dinamik Bölümler -->
                 </div>
@@ -225,4 +226,74 @@
                             {word: "gelir", isTarget: true, type: "zarf-fiil (-ir... -mez)"},
                             {word: "gelmez", isTarget: true, type: "zarf-fiil (-ir... -mez)"},
                             {word: "ellerini", isTarget: false},
-                            {word: "sabunlayıp", isTarget: true, type: "
+                            {word: "sabunlayıp", isTarget: true, type: "zarf-fiil (-ip)"},
+                            {word: "masaya", isTarget: false},
+                            {word: "oturdu", isTarget: false},
+                            {word: "ve", isTarget: false},
+                            {word: "hiç", isTarget: false},
+                            {word: "durmadan", isTarget: true, type: "zarf-fiil (-madan)"},
+                            {word: "konuştu.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Sabah spor yapmak ve yürüyüş düzenlemek sağlığımız için oldukça faydalıdır.",
+                        tokens: [
+                            {word: "Sabah", isTarget: false},
+                            {word: "spor", isTarget: false},
+                            {word: "yapmak", isTarget: true, type: "isim-fiil (-mak)"},
+                            {word: "ve", isTarget: false},
+                            {word: "yürüyüş", isTarget: false},
+                            {word: "düzenlemek", isTarget: true, type: "isim-fiil (-mek)"},
+                            {word: "sağlığımız", isTarget: false},
+                            {word: "için", isTarget: false},
+                            {word: "oldukça", isTarget: true, type: "zarf-fiil (-dıkça)"},
+                            {word: "faydalıdır.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Görünmez kazalardan kaçınmak istiyorsan kurallara kesinlikle uymalısın.",
+                        tokens: [
+                            {word: "Görünmez", isTarget: true, type: "sıfat-fiil (-mez)"},
+                            {word: "kazalardan", isTarget: false},
+                            {word: "kaçınmak", isTarget: true, type: "isim-fiil (-mak)"},
+                            {word: "istiyorsan", isTarget: false},
+                            {word: "kurallara", isTarget: false},
+                            {word: "kesinlikle", isTarget: false},
+                            {word: "uymalısın.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Güneş batarken sahilde yürüyen çocuklar neşeyle şarkı söylüyordu.",
+                        tokens: [
+                            {word: "Güneş", isTarget: false},
+                            {word: "batarken", isTarget: true, type: "zarf-fiil (-ken)"},
+                            {word: "sahilde", isTarget: false},
+                            {word: "yürüyen", isTarget: true, type: "sıfat-fiil (-en)"},
+                            {word: "çocuklar", isTarget: false},
+                            {word: "neşeyle", isTarget: false},
+                            {word: "şarkı", isTarget: false},
+                            {word: "söylüyordu.", isTarget: false}
+                        ]
+                    }
+                ]
+            };
+        });
+
+        window.onload = function() {
+            renderChapters();
+        };
+
+        function renderChapters() {
+            const grid = document.getElementById('chapters-grid');
+            grid.innerHTML = "";
+            const maxUnlocked = getMaxUnlockedChapter();
+
+            chapterData.forEach(ch => {
+                const isUnlocked = ch.id <= maxUnlocked;
+                const btn = document.createElement('button');
+                
+                if (isUnlocked) {
+                    btn.className = "p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left transition flex flex-col justify-between group";
+                    btn.innerHTML = `
+                        <div>
+                            <span class="text-xs text-amber-400 font-bold block mb-1">DOSYA
