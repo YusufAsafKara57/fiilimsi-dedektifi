@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiilimsi Dedektifi - Kusursuz Sürüm</title>
+    <title>Fiilimsi Dedektifi - Hızlı Sürüm</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -18,48 +18,288 @@
 <body class="min-h-screen flex flex-col items-center justify-center p-4 selection:bg-amber-500 selection:text-black">
 
     <div id="app" class="w-full max-w-4xl mx-auto">
-        <!-- Ana Menü / Kitap İndeksi -->
+        <!-- Ana Menü / Tüm Bölümler -->
         <div id="screen-menu" class="screen-section">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 bg-slate-900 p-4 rounded-xl border border-slate-800">
-                <div class="flex items-center gap-3 w-full sm:w-auto">
-                    <div>
-                        <span class="text-xs text-slate-400 uppercase tracking-widest block">Operasyon Merkezi</span>
-                        <span class="text-amber-400 font-bold text-lg">Baş Dedektif</span>
-                    </div>
-                </div>
-                
-                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
-                    <button onclick="openLeaderboard()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        Sıralama
-                    </button>
-                </div>
-            </div>
-
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 case-shadow">
                 <div class="text-center mb-6">
-                    <h2 class="cinzel text-2xl font-bold text-amber-400">DEDEKTİFLİK KİTABI (20 GİZLİ DOSYA)</h2>
-                    <p class="text-slate-400 text-sm">Her dosya artan zorluk derecesine ve kilitli ipuçlarına sahiptir.</p>
+                    <h2 class="cinzel text-2xl font-bold text-amber-400">TÜM DOSYALAR AÇIK - HIZLI OYUN</h2>
+                    <p class="text-slate-400 text-sm">Beklemek yok. İstediğin dosyayı seç ve anında operasyona başla.</p>
                 </div>
                 
-                <div id="chapters-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto pr-2">
-                    <!-- Dinamik Bölümler -->
+                <div id="chapters-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-[70vh] overflow-y-auto pr-2">
+                    <!-- Bölümler Buraya Gelecek -->
                 </div>
             </div>
         </div>
 
-        <!-- Bölüm Giriş / İpucu Ekranı -->
-        <div id="screen-briefing" class="screen-section hidden">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 case-shadow max-w-xl mx-auto">
-                <span id="briefing-ch-num" class="text-xs text-amber-400 font-bold uppercase tracking-widest block mb-2">DOSYA #01 İNCELENİYOR</span>
-                <h3 id="briefing-title" class="cinzel text-2xl font-bold text-white mb-4">Soruşturma Başlangıcı</h3>
-                
-                <div class="bg-slate-800/80 border border-slate-700 p-5 rounded-xl mb-6">
-                    <span class="text-xs font-bold text-amber-400 block mb-2 uppercase tracking-wide">🔍 İstihbarat ve Sürükleyici İpucu</span>
-                    <p id="briefing-hint-text" class="text-slate-300 text-sm leading-relaxed italic"></p>
+        <!-- Oyun Ekranı -->
+        <div id="screen-game" class="screen-section hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 case-shadow">
+                <!-- Üst Bilgi Barı -->
+                <div class="flex flex-wrap justify-between items-center gap-4 mb-4 pb-4 border-b border-slate-800">
+                    <div>
+                        <button onclick="backToMenu()" class="text-slate-400 hover:text-white text-sm flex items-center gap-1 mb-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            Menüye Dön
+                        </button>
+                        <h3 id="chapter-title" class="cinzel text-xl font-bold text-amber-400">Bölüm 1</h3>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-400 block">Mini Vaka</span>
+                            <span id="case-counter" class="font-bold text-white">1 / 5</span>
+                        </div>
+                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-400 block">Kalan Can</span>
+                            <span id="lives-counter" class="text-red-400 font-bold text-lg">❤️❤️❤️</span>
+                        </div>
+                        <div class="bg-slate-800 px-3.5 py-1.5 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-400 block">Süre</span>
+                            <span id="timer-display" class="font-mono text-amber-400 font-bold text-lg">--</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex justify-between items-center">
-                    <button onclick="backToMenu()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition">Kitaba Dön</button>
-                    <button onclick="proceedToDifficulty()" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-sm transition cinzel">Zorluk Seçimine Geç →</button>
+                <!-- Zorluk Seçici (Direkt Başlangıç İçin) -->
+                <div id="difficulty-selector" class="mb-6 text-center bg-slate-800/50 p-4 rounded-xl border border-slate-800">
+                    <p class="text-sm text-slate-300 mb-3 font-semibold">Zorluk Seç ve Anında Başla:</p>
+                    <div class="flex justify-center gap-3">
+                        <button onclick="startGameMode('kolay')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition">Normal (50s)</button>
+                        <button onclick="startGameMode('orta')" class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-sm transition">Hızlı (35s)</button>
+                        <button onclick="startGameMode('zor')" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition">Özel Operasyon (18s)</button>
+                    </div>
                 </div>
+
+                <!-- Oyun Alanı -->
+                <div id="game-arena" class="hidden">
+                    <div class="parchment p-6 rounded-xl mb-6 shadow-inner">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs uppercase tracking-wider font-bold text-amber-900">DELİL METNİ</span>
+                            <span id="target-info" class="text-xs font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded border border-red-300">Hedef: 0</span>
+                        </div>
+                        <p id="sentence-box" class="text-lg md:text-xl font-medium leading-relaxed flex flex-wrap gap-2 items-center"></p>
+                    </div>
+
+                    <div id="feedback-box" class="text-center font-bold text-sm min-h-[28px] mb-4"></div>
+
+                    <div id="secret-reveal" class="hidden bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl text-center mb-4">
+                        <span class="text-xs text-amber-400 block uppercase font-bold">Açığa Çıkan Şifre Parçası</span>
+                        <p id="secret-text" class="cinzel text-lg font-bold text-amber-300 tracking-wider"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentChapter = 1;
+        let currentCaseIndex = 0;
+        let currentDifficulty = 'kolay';
+        let timeLeft = 50;
+        let timerInterval = null;
+        let lives = 3;
+        let foundCount = 0;
+        let requiredCount = 0;
+        let currentCaseData = null;
+
+        // 20 Bölümlük Veri
+        const chapterData = Array.from({length: 20}, (_, i) => {
+            const chNum = i + 1;
+            return {
+                id: chNum,
+                title: `Dosya #${chNum}: Kritik Soruşturma`,
+                secret: `GİZLİ-DOSYA-KODU-${chNum}`,
+                cases: [
+                    {
+                        text: "Bahçede sararmış yaprakları temizleyen görevli, dünkü olayı görmediğini iddia etti.",
+                        tokens: [
+                            {word: "Bahçede", isTarget: false}, {word: "sararmış", isTarget: true, type: "sıfat-fiil (-mış)"}, {word: "yaprakları", isTarget: false}, {word: "temizleyen", isTarget: true, type: "sıfat-fiil (-en)"}, {word: "görevli,", isTarget: false}, {word: "dünkü", isTarget: false}, {word: "olayı", isTarget: false}, {word: "görmediğini", isTarget: true, type: "sıfat-fiil (-dik)"}, {word: "iddia", isTarget: false}, {word: "etti.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Eve gelir gelmez ellerini sabunlayıp masaya oturdu ve hiç durmadan konuştu.",
+                        tokens: [
+                            {word: "Eve", isTarget: false}, {word: "gelir", isTarget: true, type: "zarf-fiil (-ir... -mez)"}, {word: "gelmez", isTarget: true, type: "zarf-fiil (-ir... -mez)"}, {word: "ellerini", isTarget: false}, {word: "sabunlayıp", isTarget: true, type: "zarf-fiil (-ip)"}, {word: "masaya", isTarget: false}, {word: "oturdu", isTarget: false}, {word: "ve", isTarget: false}, {word: "hiç", isTarget: false}, {word: "durmadan", isTarget: true, type: "zarf-fiil (-madan)"}, {word: "konuştu.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Görünmez kazalardan kaçınmak istiyorsan kurallara kesinlikle uymalısın.",
+                        tokens: [
+                            {word: "Görünmez", isTarget: true, type: "sıfat-fiil (-mez)"}, {word: "kazalardan", isTarget: false}, {word: "kaçınmak", isTarget: true, type: "isim-fiil (-mak)"}, {word: "istiyorsan", isTarget: false}, {word: "kurallara", isTarget: false}, {word: "kesinlikle", isTarget: false}, {word: "uymalısın.", isTarget: false}
+                        ]
+                    }
+                ]
+            };
+        });
+
+        window.onload = function() {
+            renderChapters();
+        };
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function renderChapters() {
+            const grid = document.getElementById('chapters-grid');
+            grid.innerHTML = "";
+            
+            // Tümü anında açık
+            chapterData.forEach(ch => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-amber-500 rounded-xl text-left transition flex flex-col justify-between group cursor-pointer";
+                btn.innerHTML = `
+                    <div>
+                        <span class="text-xs text-amber-400 font-bold block mb-1">DOSYA #${ch.id}</span>
+                        <span class="text-sm font-semibold text-white">Hemen Oyna</span>
+                    </div>
+                `;
+                btn.onclick = () => jumpToGame(ch.id);
+                grid.appendChild(btn);
+            });
+        }
+
+        // Araya giren ekranlar kaldırıldı, direkt oyuna geçiş
+        function jumpToGame(chId) {
+            currentChapter = chId;
+            currentCaseIndex = 0;
+            document.getElementById('chapter-title').innerText = `Dosya #${currentChapter}`;
+            document.getElementById('difficulty-selector').classList.remove('hidden');
+            document.getElementById('game-arena').classList.add('hidden');
+            document.getElementById('timer-display').innerText = "--";
+            
+            switchScreen('screen-game');
+        }
+
+        function backToMenu() {
+            clearInterval(timerInterval);
+            switchScreen('screen-menu');
+        }
+
+        function startGameMode(mode) {
+            currentDifficulty = mode;
+            if (mode === 'kolay') timeLeft = 50;
+            else if (mode === 'orta') timeLeft = 35;
+            else if (mode === 'zor') timeLeft = 18;
+
+            document.getElementById('difficulty-selector').classList.add('hidden');
+            document.getElementById('game-arena').classList.remove('hidden');
+            loadCase();
+        }
+
+        function loadCase() {
+            clearInterval(timerInterval);
+            const ch = chapterData.find(c => c.id === currentChapter);
+            
+            if (currentCaseIndex >= ch.cases.length) {
+                alert(`Harika! Dosya #${currentChapter} bitti.`);
+                backToMenu();
+                return;
+            }
+
+            currentCaseData = ch.cases[currentCaseIndex];
+            foundCount = 0;
+            requiredCount = currentCaseData.tokens.filter(t => t.isTarget).length;
+
+            document.getElementById('case-counter').innerText = `${currentCaseIndex + 1} / ${ch.cases.length}`;
+            document.getElementById('lives-counter').innerText = '❤️❤️❤️';
+            document.getElementById('target-info').innerText = `Hedef: ${requiredCount} Bul`;
+            document.getElementById('feedback-box').innerText = '';
+            document.getElementById('secret-reveal').classList.add('hidden');
+
+            lives = 3;
+            renderSentence();
+            startTimer();
+        }
+
+        function renderSentence() {
+            const box = document.getElementById('sentence-box');
+            box.innerHTML = '';
+            box.style.pointerEvents = 'auto';
+
+            currentCaseData.tokens.forEach((token) => {
+                const span = document.createElement('span');
+                span.className = "word-token px-3 py-1.5 bg-slate-800 text-slate-100 rounded-lg border border-slate-700 text-base font-medium";
+                span.innerText = token.word;
+                span.onclick = () => handleTokenClick(token, span);
+                box.appendChild(span);
+            });
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval); 
+            const display = document.getElementById('timer-display');
+            display.innerText = timeLeft + 's';
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                display.innerText = timeLeft + 's';
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleWrongClick("Süre bitti!");
+                }
+            }, 1000);
+        }
+
+        function handleTokenClick(token, element) {
+            if (element.classList.contains('clicked') || document.getElementById('sentence-box').style.pointerEvents === 'none') return;
+
+            if (token.isTarget) {
+                element.classList.remove('bg-slate-800', 'border-slate-700');
+                element.classList.add('bg-emerald-600', 'border-emerald-400', 'text-white', 'clicked');
+                foundCount++;
+                document.getElementById('feedback-box').innerHTML = `<span class="text-emerald-400">Doğru! (${token.type})</span>`;
+                
+                if (foundCount === requiredCount) {
+                    clearInterval(timerInterval);
+                    document.getElementById('sentence-box').style.pointerEvents = 'none';
+                    document.getElementById('feedback-box').innerHTML = `<span class="text-emerald-400 font-bold">Geçiş yapılıyor...</span>`;
+                    
+                    setTimeout(() => {
+                        currentCaseIndex++;
+                        loadCase();
+                    }, 800); // Bekleme süresi hızlandırıldı
+                }
+            } else {
+                element.classList.add('bg-rose-600', 'border-rose-400', 'clicked');
+                lives--;
+                updateLivesUI();
+                document.getElementById('feedback-box').innerHTML = `<span class="text-rose-400">Yanlış!</span>`;
+                
+                if (lives <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('sentence-box').style.pointerEvents = 'none';
+                    setTimeout(() => {
+                        alert("Canlar bitti! Başa dönüyorsun.");
+                        backToMenu();
+                    }, 300);
+                }
+            }
+        }
+
+        function handleWrongClick(msg) {
+            lives--;
+            updateLivesUI();
+            document.getElementById('feedback-box').innerHTML = `<span class="text-rose-400">${msg}</span>`;
+            
+            if (lives <= 0) {
+                document.getElementById('sentence-box').style.pointerEvents = 'none';
+                setTimeout(() => {
+                    alert("Başarısız!");
+                    backToMenu();
+                }, 300);
+            } else {
+                timeLeft = currentDifficulty === 'kolay' ? 50 : (currentDifficulty === 'orta' ? 35 : 18);
+                startTimer();
+            }
+        }
+
+        function updateLivesUI() {
+            let hearts = "";
+            for(let i=0; i<lives; i++) hearts += "❤️";
+            document.getElementById('lives-counter').innerText = hearts || "🖤";
+        }
+    </script>
+</body>
+</html>
