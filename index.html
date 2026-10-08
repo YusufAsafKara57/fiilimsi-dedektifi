@@ -3,462 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiilimsi Dedektifi - Çevrim İçi Kitap Modu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Fiilimsi Dedektifi</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; }
-        .cinzel { font-family: 'Cinzel', serif; }
-        .case-shadow { box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); }
-        .parchment { background: linear-gradient(135deg, #fdfbf7 0%, #f4ebd0 100%); color: #2c221e; }
-        .word-token { transition: all 0.15s ease; cursor: pointer; }
-        .word-token:hover { transform: scale(1.05); }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        .level-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        button.opt-btn {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button.opt-btn:hover {
+            background: #0369a1;
+        }
+        .feedback {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .correct { color: #4ade80; }
+        .wrong { color: #f87171; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 selection:bg-amber-500 selection:text-black">
+<body>
 
-    <div id="app" class="w-full max-w-4xl mx-auto">
-        <!-- Nickname / Giriş Ekranı -->
-        <div id="screen-login" class="bg-slate-900 border border-slate-700 rounded-2xl p-8 case-shadow text-center max-w-md mx-auto">
-            <div class="inline-block p-4 bg-amber-500/10 border border-amber-500/30 rounded-full mb-6">
-                <svg class="w-12 h-12 text-amber-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+    <div class="container">
+        <h1>🔍 Fiilimsi Dedektifi</h1>
+        <div class="subtitle">Mini Bölümler - Bilgini Test Et!</div>
+
+        <!-- Bölüm 1 -->
+        <div class="level-card">
+            <div class="question-text">1. "Bahçedeki sararmış yaprakları tek tek temizledi." cümlesinde altı çizili kelime hangi fiilimsidir?</div>
+            <div class="options" id="q1-opts">
+                <button class="opt-btn" onclick="checkAnswer(1, 'Sıfat-Fiil', 'Doğru! -mış eki sıfat-fiil yapmıştır.')">Sıfat-Fiil</button>
+                <button class="opt-btn" onclick="checkAnswer(1, 'İsim-Fiil', 'Yanlış, tekrar dene.')">İsim-Fiil</button>
+                <button class="opt-btn" onclick="checkAnswer(1, 'Zarf-Fiil', 'Yanlış, tekrar dene.')">Zarf-Fiil</button>
+                <button class="opt-btn" onclick="checkAnswer(1, 'Fiil değil', 'Yanlış, tekrar dene.')">Fiil Değil</button>
             </div>
-            <h1 class="cinzel text-3xl font-black text-amber-400 mb-2">FİİLİMSİ DEDEKTİFİ</h1>
-            <p class="text-slate-400 text-sm mb-6">20 Kilitli Kitap Bölümü ve Gerçek Zamanlı Bulut Sıralaması</p>
-            
-            <input type="text" id="nickname-input" placeholder="Dedektif Mahlasınız (Örn: Komiser Can)" maxlength="20" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white text-center focus:outline-none focus:border-amber-400 mb-4 font-semibold">
-            
-            <button onclick="saveNickname()" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition shadow-lg cinzel">
-                DOSYALARI AÇ VE BAŞLA
-            </button>
+            <div class="feedback" id="q1-fb"></div>
         </div>
 
-        <!-- Ana Menü / Kitap İndeksi -->
-        <div id="screen-menu" class="hidden">
-            <div class="flex justify-between items-center mb-6 bg-slate-900 p-4 rounded-xl border border-slate-800">
-                <div>
-                    <span class="text-xs text-slate-400 uppercase tracking-widest block">Aktif Dedektif</span>
-                    <span id="display-nickname" class="text-amber-400 font-bold text-lg"></span>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="openLeaderboard()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold transition flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        Gerçek Çevrim İçi Sıralama
-                    </button>
-                    <button onclick="resetUser()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm">Değiştir</button>
-                </div>
+        <!-- Bölüm 2 -->
+        <div class="level-card">
+            <div class="question-text">2. "Eve gelir gelmez ellerini yıkadı." cümlesinde zarf-fiil (bağ-fiil) eki almış kelime hangisidir?</div>
+            <div class="options" id="q2-opts">
+                <button class="opt-btn" onclick="checkAnswer(2, 'Eve', 'Yanlış.')">Eve</button>
+                <button class="opt-btn" onclick="checkAnswer(2, 'gelir gelmez', 'Doğru! -r... -mez eki zarf-fiildir.')">gelir gelmez</button>
+                <button class="opt-btn" onclick="checkAnswer(2, 'ellerini', 'Yanlış.')">ellerini</button>
+                <button class="opt-btn" onclick="checkAnswer(2, 'yıkadı', 'Yanlış, bu çekimli fiildir.')">yıkadı</button>
             </div>
-
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 case-shadow">
-                <div class="text-center mb-6">
-                    <h2 class="cinzel text-2xl font-bold text-amber-400">DEDEKTİFLİK KİTABI (KİLİTLİ 20 BÖLÜM)</h2>
-                    <p class="text-slate-400 text-sm">Sonraki bölümü açmak için sırasıyla önceki bölümleri tamamlamalısınız.</p>
-                </div>
-                
-                <div id="chapters-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto pr-2">
-                    <!-- Dinamik Bölümler -->
-                </div>
-            </div>
+            <div class="feedback" id="q2-fb"></div>
         </div>
 
-        <!-- Oyun / Soruşturma Ekranı -->
-        <div id="screen-game" class="hidden">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 case-shadow">
-                <!-- Üst Bilgi Barı -->
-                <div class="flex flex-wrap justify-between items-center gap-4 mb-6 pb-4 border-b border-slate-800">
-                    <div>
-                        <button onclick="backToMenu()" class="text-slate-400 hover:text-white text-sm flex items-center gap-1 mb-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            Kitaba Dön
-                        </button>
-                        <h3 id="chapter-title" class="cinzel text-xl font-bold text-amber-400">Bölüm 1</h3>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                            <span class="text-xs text-slate-400 block">Mini Vaka</span>
-                            <span id="case-counter" class="font-bold text-white">1 / 20</span>
-                        </div>
-                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                            <span class="text-xs text-slate-400 block">Kalan Can</span>
-                            <span id="lives-counter" class="text-red-400 font-bold text-lg">❤️❤️❤️</span>
-                        </div>
-                        <div class="bg-slate-800 px-3.5 py-1.5 rounded-lg border border-slate-700">
-                            <span class="text-xs text-slate-400 block">Süre</span>
-                            <span id="timer-display" class="font-mono text-amber-400 font-bold text-lg">80s</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Zorluk Seçici -->
-                <div id="difficulty-selector" class="mb-6 text-center bg-slate-800/50 p-4 rounded-xl border border-slate-800">
-                    <p class="text-sm text-slate-300 mb-3 font-semibold">Zorluk Derecesi Seçin:</p>
-                    <div class="flex justify-center gap-3">
-                        <button onclick="startGameMode('kolay')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition">Kolay (80s)</button>
-                        <button onclick="startGameMode('orta')" class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-sm transition">Orta (60s)</button>
-                        <button onclick="startGameMode('zor')" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition">Zor (25s)</button>
-                    </div>
-                </div>
-
-                <!-- Oyun Alanı / Parşömen -->
-                <div id="game-arena" class="hidden">
-                    <div class="parchment p-6 rounded-xl mb-6 shadow-inner">
-                        <div class="flex justify-between items-center mb-3">
-                            <span id="clase-sub-title" class="text-xs uppercase tracking-wider font-bold text-amber-900">DELİL DOSYASI</span>
-                            <span id="target-info" class="text-xs font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded border border-red-300">Hedef: 0 Bulunacak</span>
-                        </div>
-                        <p id="sentence-box" class="text-lg md:text-xl font-medium leading-relaxed flex flex-wrap gap-2 items-center">
-                            <!-- Kelimeler buraya dinamik gelir -->
-                        </p>
-                    </div>
-
-                    <div id="feedback-box" class="text-center font-bold text-sm min-h-[28px] mb-4"></div>
-
-                    <!-- Şifre Parçası Bildirimi -->
-                    <div id="secret-reveal" class="hidden bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl text-center mb-4">
-                        <span class="text-xs text-amber-400 block uppercase font-bold">Açığa Çıkan Şifre Parçası</span>
-                        <p id="secret-text" class="cinzel text-lg font-bold text-amber-300 tracking-wider"></p>
-                    </div>
-                </div>
+        <!-- Bölüm 3 -->
+        <div class="level-card">
+            <div class="question-text">3. "Kitap okumak insanın ufkunu geliştirir." cümlesindeki fiilimsinin türü nedir?</div>
+            <div class="options" id="q3-opts">
+                <button class="opt-btn" onclick="checkAnswer(3, 'Sıfat-Fiil', 'Yanlış.')">Sıfat-Fiil</button>
+                <button class="opt-btn" onclick="checkAnswer(3, 'İsim-Fiil', 'Doğru! -mak (mak/mek) isim-fiil ekidir.')">İsim-Fiil</button>
+                <button class="opt-btn" onclick="checkAnswer(3, 'Zarf-Fiil', 'Yanlış.')">Zarf-Fiil</button>
+                <button class="opt-btn" onclick="checkAnswer(3, 'Hiçbiri', 'Yanlış.')">Hiçbiri</button>
             </div>
+            <div class="feedback" id="q3-fb"></div>
         </div>
 
-        <!-- Liderlik Tablosu Modal -->
-        <div id="modal-leaderboard" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-6 case-shadow">
-                <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-800">
-                    <h3 class="cinzel text-xl font-bold text-amber-400">Çevrim İçi Küresel Sıralama</h3>
-                    <button onclick="closeLeaderboard()" class="text-slate-400 hover:text-white font-bold">✕</button>
-                </div>
-                <div id="leaderboard-list" class="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
-                    <p class="text-center text-slate-400 py-6">Bulut sunucusundan gerçek skorlar çekiliyor...</p>
-                </div>
-                <div class="mt-6 text-center">
-                    <button onclick="closeLeaderboard()" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-sm">Kapat</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
-        // Oyun Durumu ve İlerleme
-        let currentUser = localStorage.getItem("fiilimsi_nickname") || "";
-        let currentChapter = 1;
-        let currentCaseIndex = 0;
-        let currentDifficulty = 'kolay';
-        let timeLeft = 80;
-        let timerInterval = null;
-        let lives = 3;
-        let foundCount = 0;
-        let requiredCount = 0;
-        let currentCaseData = null;
-
-        // Bölüm Kilit Sistemi (Kullanıcının tamamladığı en yüksek bölüm)
-        function getMaxUnlockedChapter() {
-            if (!currentUser) return 1;
-            const progress = JSON.parse(localStorage.getItem(`fiilimsi_progress_${currentUser}`) || '{"maxUnlocked": 1}');
-            return progress.maxUnlocked || 1;
-        }
-
-        function unlockNextChapter(completedChapter) {
-            if (!currentUser) return;
-            const key = `fiilimsi_progress_${currentUser}`;
-            let progress = JSON.parse(localStorage.getItem(key) || '{"maxUnlocked": 1}');
-            if (completedChapter >= progress.maxUnlocked) {
-                progress.maxUnlocked = completedChapter + 1;
-                if (progress.maxUnlocked > 20) progress.maxUnlocked = 20;
-                localStorage.setItem(key, JSON.stringify(progress));
-            }
-        }
-
-        // 20 Bölüm ve 20'şer Mini Vaka Verisi
-        const chapterData = Array.from({length: 20}, (_, i) => {
-            const chNum = i + 1;
-            return {
-                id: chNum,
-                title: `Bölüm ${chNum}: Soruşturma ${chNum}`,
-                secret: `GİZLİ-ŞİFRE-${chNum}-BAŞARI`,
-                cases: Array.from({length: 20}, (_, j) => {
-                    const cNum = j + 1;
-                    return {
-                        id: cNum,
-                        text: `Şüpheli, olay yerinden koşarak uzaklaşırken arkasına bakmadan kayboldu ${cNum}.`,
-                        tokens: [
-                            {word: "Şüpheli,", isTarget: false},
-                            {word: "olay", isTarget: false},
-                            {word: "yerinden", isTarget: false},
-                            {word: "koşarak", isTarget: true, type: "zarf-fiil"},
-                            {word: "uzaklaşırken", isTarget: true, type: "zarf-fiil"},
-                            {word: "arkasına", isTarget: false},
-                            {word: "bakmadan", isTarget: true, type: "zarf-fiil"},
-                            {word: "kayboldu", isTarget: false}
-                        ]
-                    };
-                })
-            };
-        });
-
-        // Başlangıç Kontrolü
-        window.onload = function() {
-            if (currentUser) {
-                document.getElementById('screen-login').classList.add('hidden');
-                document.getElementById('screen-menu').classList.remove('hidden');
-                document.getElementById('display-nickname').innerText = currentUser;
-                renderChapters();
-            }
-        };
-
-        function saveNickname() {
-            const val = document.getElementById('nickname-input').value.trim();
-            if (!val) {
-                alert("Lütfen geçerli bir dedektif adı girin!");
-                return;
-            }
-            currentUser = val;
-            localStorage.setItem("fiilimsi_nickname", currentUser);
-            document.getElementById('screen-login').classList.add('hidden');
-            document.getElementById('screen-menu').classList.remove('hidden');
-            document.getElementById('display-nickname').innerText = currentUser;
-            renderChapters();
-        }
-
-        function resetUser() {
-            localStorage.removeItem("fiilimsi_nickname");
-            currentUser = "";
-            document.getElementById('screen-menu').classList.add('hidden');
-            document.getElementById('screen-login').classList.remove('hidden');
-        }
-
-        function renderChapters() {
-            const grid = document.getElementById('chapters-grid');
-            grid.innerHTML = "";
-            const maxUnlocked = getMaxUnlockedChapter();
-
-            chapterData.forEach(ch => {
-                const isUnlocked = ch.id <= maxUnlocked;
-                const btn = document.createElement('button');
-                
-                if (isUnlocked) {
-                    btn.className = "p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left transition flex flex-col justify-between group";
-                    btn.innerHTML = `
-                        <div>
-                            <span class="text-xs text-amber-400 font-bold block mb-1">BÖLÜM ${ch.id}</span>
-                            <span class="text-sm font-semibold text-white group-hover:text-amber-300">Açık Dosya</span>
-                        </div>
-                        <span class="text-xs text-emerald-400 mt-3 block font-medium">Oyna ▶</span>
-                    `;
-                    btn.onclick = () => selectChapter(ch.id);
-                } else {
-                    btn.className = "p-4 bg-slate-900/50 border border-slate-800 rounded-xl text-left opacity-50 cursor-not-allowed flex flex-col justify-between";
-                    btn.innerHTML = `
-                        <div>
-                            <span class="text-xs text-slate-500 font-bold block mb-1">BÖLÜM ${ch.id}</span>
-                            <span class="text-sm font-semibold text-slate-500">Kilitli</span>
-                        </div>
-                        <span class="text-xs text-rose-400 mt-3 block font-medium">🔒 Önceki Bölüm Şart</span>
-                    `;
-                }
-                grid.appendChild(btn);
-            });
-        }
-
-        function selectChapter(chId) {
-            const maxUnlocked = getMaxUnlockedChapter();
-            if (chId > maxUnlocked) {
-                alert("Bu bölüm kilitli! Önceki bölümleri tamamlamalısınız.");
-                return;
-            }
-            currentChapter = chId;
-            currentCaseIndex = 0;
-            document.getElementById('screen-menu').classList.add('hidden');
-            document.getElementById('screen-game').classList.remove('hidden');
-            document.getElementById('chapter-title').innerText = `Bölüm ${chId} - Soruşturma Masası`;
-            document.getElementById('difficulty-selector').classList.remove('hidden');
-            document.getElementById('game-arena').classList.add('hidden');
-        }
-
-        function backToMenu() {
-            clearInterval(timerInterval);
-            document.getElementById('screen-game').classList.add('hidden');
-            document.getElementById('screen-menu').classList.remove('hidden');
-            renderChapters();
-        }
-
-        function startGameMode(mode) {
-            currentDifficulty = mode;
-            if (mode === 'kolay') timeLeft = 80;
-            else if (mode === 'orta') timeLeft = 60;
-            else if (mode === 'zor') timeLeft = 25;
-
-            document.getElementById('difficulty-selector').classList.add('hidden');
-            document.getElementById('game-arena').classList.remove('hidden');
-            loadCase();
-        }
-
-        function loadCase() {
-            clearInterval(timerInterval);
-            const ch = chapterData.find(c => c.id === currentChapter);
-            if (currentCaseIndex >= ch.cases.length) {
-                alert(`Tebrikler Dedektif ${currentUser}! Bölüm ${currentChapter} başarıyla tamamlandı!`);
-                unlockNextChapter(currentChapter);
-                saveScoreToCloud(currentUser, currentChapter * 50);
-                backToMenu();
-                return;
-            }
-
-            currentCaseData = ch.cases[currentCaseIndex];
-            foundCount = 0;
-            requiredCount = currentCaseData.tokens.filter(t => t.isTarget).length;
-
-            document.getElementById('case-counter').innerText = `${currentCaseIndex + 1} / 20`;
-            document.getElementById('lives-counter').innerText = '❤️❤️❤️';
-            document.getElementById('target-info').innerText = `Hedef: ${requiredCount} Fiilimsi Bul`;
-            document.getElementById('feedback-box').innerText = '';
-            document.getElementById('secret-reveal').classList.add('hidden');
-
-            lives = 3;
-            renderSentence();
-            startTimer();
-        }
-
-        function renderSentence() {
-            const box = document.getElementById('sentence-box');
-            box.innerHTML = '';
-            currentCaseData.tokens.forEach((token) => {
-                const span = document.createElement('span');
-                span.className = "word-token px-3 py-1.5 bg-slate-800 text-slate-100 rounded-lg border border-slate-700 text-base font-medium";
-                span.innerText = token.word;
-                span.onclick = () => handleTokenClick(token, span);
-                box.appendChild(span);
-            });
-        }
-
-        function startTimer() {
-            const display = document.getElementById('timer-display');
-            display.innerText = timeLeft + 's';
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                display.innerText = timeLeft + 's';
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleWrongClick("Süre bitti! Delil karartıldı.");
-                }
-            }, 1000);
-        }
-
-        function handleTokenClick(token, element) {
-            if (element.classList.contains('clicked')) return;
-
-            if (token.isTarget) {
-                element.classList.remove('bg-slate-800', 'border-slate-700');
-                element.classList.add('bg-emerald-600', 'border-emerald-400', 'text-white', 'clicked');
-                foundCount++;
-                document.getElementById('feedback-box').innerHTML = `<span class="text-emerald-400">Doğru delil yakalandı!</span>`;
-                
-                if (foundCount === requiredCount) {
-                    clearInterval(timerInterval);
-                    document.getElementById('feedback-box').innerHTML = `<span class="text-emerald-400 font-bold">Harika! Mini vaka çözüldü. Sonraki vakaya geçiliyor...</span>`;
-                    
-                    setTimeout(() => {
-                        currentCaseIndex++;
-                        if (currentCaseIndex % 5 === 0) {
-                            document.getElementById('secret-reveal').classList.remove('hidden');
-                            document.getElementById('secret-text').innerText = `DELİL PARÇASI #${currentCaseIndex}: ${chapterData[currentChapter-1].secret.substring(0, 10)}...`;
-                        }
-                        loadCase();
-                    }, 1200);
-                }
+        function checkAnswer(questionNo, selected, message) {
+            const fbElement = document.getElementById(`q${questionNo}-fb`);
+            fbElement.textContent = message;
+            if (message.startsWith('Doğru')) {
+                fbElement.className = 'feedback correct';
             } else {
-                element.classList.add('bg-rose-600', 'border-rose-400', 'clicked');
-                lives--;
-                updateLivesUI();
-                document.getElementById('feedback-box').innerHTML = `<span class="text-rose-400">Yanlış seçim! Bu fiilimsi değil.</span>`;
-                if (lives <= 0) {
-                    clearInterval(timerInterval);
-                    alert("Canlar tükendi! Soruşturma başarısız oldu.");
-                    backToMenu();
-                }
+                fbElement.className = 'feedback wrong';
             }
-        }
-
-        function handleWrongClick(msg) {
-            lives--;
-            updateLivesUI();
-            document.getElementById('feedback-box').innerHTML = `<span class="text-rose-400">${msg}</span>`;
-            if (lives <= 0) {
-                alert("Soruşturma başarısız!");
-                backToMenu();
-            } else {
-                timeLeft = currentDifficulty === 'kolay' ? 80 : (currentDifficulty === 'orta' ? 60 : 25);
-                startTimer();
-            }
-        }
-
-        function updateLivesUI() {
-            let hearts = "";
-            for(let i=0; i<lives; i++) hearts += "❤️";
-            document.getElementById('lives-counter').innerText = hearts || "🖤";
-        }
-
-        // Gerçek Çevrim İçi Supabase API Entegrasyonu
-        const SUPABASE_URL = "https://your-project-id.supabase.co";
-        const SUPABASE_KEY = "your-public-anon-key";
-
-        async function saveScoreToCloud(name, score) {
-            try {
-                await fetch(`${SUPABASE_URL}/rest/v1/leaderboard`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": `Bearer ${SUPABASE_KEY}`
-                    },
-                    body: JSON.stringify({ name, score, created_at: new Date() })
-                });
-            } catch (e) {
-                console.log("Bulut kayıt hatası:", e);
-            }
-        }
-
-        async function openLeaderboard() {
-            document.getElementById('modal-leaderboard').classList.remove('hidden');
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = `<p class="text-center text-slate-400 py-6">Gerçek zamanlı skorlar yükleniyor...</p>`;
-
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard?select=*&order=score.desc&limit=10`, {
-                    headers: {
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": `Bearer ${SUPABASE_KEY}`
-                    }
-                });
-                const data = await res.json();
-                
-                if (data && data.length > 0) {
-                    list.innerHTML = "";
-                    data.forEach((item, idx) => {
-                        const row = document.createElement('div');
-                        row.className = "flex justify-between items-center bg-slate-800 p-3 rounded-xl border border-slate-700";
-                        row.innerHTML = `
-                            <div class="flex items-center gap-3">
-                                <span class="font-bold text-amber-400">#${idx + 1}</span>
-                                <span class="font-semibold text-white">${item.name}</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-emerald-400 font-bold">${item.score} Puan</span>
-                            </div>
-                        `;
-                        list.appendChild(row);
-                    });
-                } else {
-                    list.innerHTML = `<p class="text-center text-slate-400 py-6">Henüz çevrim içi skor kaydedilmedi.</p>`;
-                }
-            } catch (e) {
-                list.innerHTML = `<p class="text-center text-rose-400 py-6">Sunucuya bağlanılamadı. (Demo Modu)</p>`;
-            }
-        }
-
-        function closeLeaderboard() {
-            document.getElementById('modal-leaderboard').classList.add('hidden');
         }
     </script>
 </body>
