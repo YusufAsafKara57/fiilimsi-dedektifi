@@ -84,7 +84,7 @@
                         </div>
                         <div class="bg-slate-800 px-3.5 py-1.5 rounded-lg border border-slate-700">
                             <span class="text-xs text-slate-400 block">Süre</span>
-                            <span id="timer-display" class="font-mono text-amber-400 font-bold text-lg">80s</span>
+                            <span id="timer-display" class="font-mono text-amber-400 font-bold text-lg">140s</span>
                         </div>
                     </div>
                 </div>
@@ -93,9 +93,9 @@
                 <div id="difficulty-selector" class="mb-6 text-center bg-slate-800/50 p-4 rounded-xl border border-slate-800">
                     <p class="text-sm text-slate-300 mb-3 font-semibold">Zorluk Derecesi Seçin:</p>
                     <div class="flex justify-center gap-3">
-                        <button onclick="startGameMode('kolay')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition">Kolay (80s)</button>
-                        <button onclick="startGameMode('orta')" class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-sm transition">Orta (60s)</button>
-                        <button onclick="startGameMode('zor')" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition">Zor (25s)</button>
+                        <button onclick="startGameMode('kolay')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition">Kolay (140s)</button>
+                        <button onclick="startGameMode('orta')" class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-sm transition">Orta (120s)</button>
+                        <button onclick="startGameMode('zor')" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition">Zor (85s)</button>
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@
         let currentChapter = 1;
         let currentCaseIndex = 0;
         let currentDifficulty = 'kolay';
-        let timeLeft = 80;
+        let timeLeft = 140;
         let timerInterval = null;
         let lives = 3;
         let foundCount = 0;
@@ -389,9 +389,9 @@
 
         function startGameMode(mode) {
             currentDifficulty = mode;
-            if (mode === 'kolay') timeLeft = 80;
-            else if (mode === 'orta') timeLeft = 60;
-            else if (mode === 'zor') timeLeft = 25;
+            if (mode === 'kolay') timeLeft = 140;
+            else if (mode === 'orta') timeLeft = 120;
+            else if (mode === 'zor') timeLeft = 85;
 
             document.getElementById('difficulty-selector').classList.add('hidden');
             document.getElementById('game-arena').classList.remove('hidden');
@@ -449,6 +449,7 @@
             }, 1000);
         }
 
+        // Süre bitince ana menüye dön
         function timeoutToMenu() {
             clearInterval(timerInterval);
             alert("Süre bitti! Delil karartıldı. Ana menüye dönülüyor.");
@@ -498,7 +499,7 @@
                 alert("Soruşturma başarısız!");
                 backToMenu();
             } else {
-                timeLeft = currentDifficulty === 'kolay' ? 80 : (currentDifficulty === 'orta' ? 60 : 25);
+                timeLeft = currentDifficulty === 'kolay' ? 140 : (currentDifficulty === 'orta' ? 120 : 85);
                 startTimer();
             }
         }
