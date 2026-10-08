@@ -233,7 +233,7 @@
                             {word: "sararmış", isTarget: true, type: "sıfat-fiil (-mış)"},
                             {word: "yaprakları", isTarget: false},
                             {word: "temizleyen", isTarget: true, type: "sıfat-fiil (-en)"},
-                            {word: "görevli,", isTarget: true, type: "sıfat-fiil (adlaşmış)"},
+                            {word: "görevli,", isTarget: false, type: "adlaşmış sıfat (Hedef Değil)"},
                             {word: "dünkü", isTarget: false},
                             {word: "olayı", isTarget: false},
                             {word: "görmediğini", isTarget: true, type: "sıfat-fiil (-dik)"},
@@ -591,8 +591,4 @@
         }
 
         function closeLeaderboard() {
-            document.getElementById('modal-leaderboard').classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('modal-leaderboard').classList
