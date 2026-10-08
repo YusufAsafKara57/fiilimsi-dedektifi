@@ -111,7 +111,7 @@
                 <div id="difficulty-selector" class="mb-6 text-center bg-slate-800/50 p-4 rounded-xl border border-slate-800">
                     <p class="text-sm text-slate-300 mb-3 font-semibold">Operasyon Zorluk Derecesi Seçin:</p>
                     <div class="flex justify-center gap-3">
-                        <button onclick="startGameMode('kolay')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition">Normal Dedektif (50s)</Title></button>
+                        <button onclick="startGameMode('kolay')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition">Normal Dedektif (50s)</button>
                         <button onclick="startGameMode('orta')" class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg text-sm transition">Kıdemli Başkomiser (35s)</button>
                         <button onclick="startGameMode('zor')" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition">Özel Operasyon (18s)</button>
                     </div>
@@ -158,7 +158,6 @@
     </div>
 
     <script>
-        // Oyun Durumu ve İlerleme
         let currentUser = localStorage.getItem("fiilimsi_nickname") || "";
         let currentChapter = 1;
         let selectedChapterForPlay = 1;
@@ -188,5 +187,389 @@
             }
         }
 
-        // Zorlaştırılmış, Çeldiricileri Güçlendirilmiş ve Sürükleyici İpuçlarına Sahip 20 Bölüm Veritabanı
-        const chapterData = Array.from({length: 20}, (_,
+        const chapterData = Array.from({length: 20}, (_, i) => {
+            const chNum = i + 1;
+            const hints = [
+                "Şehir merkezindeki eski antika dükkanında gece yarısı soygun yapıldı. Soyguncunun bıraktığı deliller sıfat-fiil ve zarf-fiil tuzaklarıyla dolu. Dikkatli ol!",
+                "Karanlık limanda demirli gemide şüpheli kargo hareketliliği var. Kaptan köprüsündeki şifreli notlarda adlaşmış sıfat-fiillere ve kalıcı isimlere dikkat et.",
+                "Gece yarısı müzeden çalınan paha biçilemez tablo için ihbar geldi. Şüphelilerin ifadelerindeki zarf-fiil ekleri birbirini tutmuyor, açığı yakala!",
+                "Üniversite kampüsündeki gizli laboratuvarda veri sızıntısı yaşandı. Bilgisayar loglarında geçen fiilimsiler adeta bir labirent gibi gizlenmiş.",
+                "Metro istasyonunda bırakılan gizli evrak çantasının parolasını çözmek için cümlelerin içindeki fiilimsi yapılarını eksiksiz ayıklamalısın.",
+                "Eski tarihi konakta yankılanan garip sesler ve kayıp mücevher vakası. Olay yerindeki tanıkların ifadelerinde kalıcı isimler ile fiilimsileri karıştırma!",
+                "Uluslararası bir finans operasyonunda şifreli telgraflar çözülmeyi bekliyor. İsim-fiil eklerini kip eklerinden ayırt etmek hayatidir.",
+                "Şehrin kuytu mahallesinde kilitli bir depoda illegal sevkiyat yapılıyor. Metinlerdeki adlaşmış sıfat-fiiller tuzak kurularak gizlenmiş.",
+                "Büyük bir banka soygununun ardından kaçan zanlının terk ettiği araçta parmak izleri ve şifreli mektuplar bulundu. Zarf-fiil zaman ilişkisine dikkat et.",
+                "Dağ evinde mahsur kalan ajanların bıraktığı son acil durum çağrısı karmakarışık eklerle şifrelenmiş. Fiilimsi türlerini doğru tespit et.",
+                "Karaköy rıhtımındaki terk edilmiş depoda gizli bir buluşma gerçekleşti. İfadelerdeki yan cümlecik kuran fiilimsileri hemen ortaya çıkar.",
+                "Sanat galerisinde gerçekleşen sahte tablo değişim operasyonu. Eleştirmenlerin raporlarındaki sıfat-fiil ekleri dedektiflik becerini test ediyor.",
+                "Göl kenarındaki gizli villada yapılan tahkikat. Cümle içinde adlaşmış olan sıfat-fiiller normal adlarla karıştırılmamalıdır.",
+                "Büyük bir teknoloji firmasında endüstriyel casusluk vakası. Kod satırları arasına gizlenmiş zarf-fiil öbeklerini ve durum anlamlarını çöz.",
+                "Havaalanı kargo terminalinde yakalanan kaçakçılık şebekesi. Tutanaklardaki fiilimsi öbeklerini hızla tespit edip operasyonu tamamla.",
+                "Yeraltı şebekesinin haberleşme ağında ele geçirilen son şifreli mektup. İsim-fiil eklerinin olumsuzluk ekleriyle karışmasına izin verme.",
+                "Gece kulübü arka sokaklarındaki gizli operasyon. Tanınmamak için kılık değiştiren şüphelilerin cümle yapılarındaki fiilimsileri yakala.",
+                "Üniversite kütüphanesinde nadir eserler salonunda gerçekleşen soygun girişimi. Metinlerdeki ortaç (sıfat-fiil) görevli sözcüklere odaklan.",
+                "Eski tren garında hareket halindeki vagonda geçen kovalamaca. Zarf-fiil eklerinin cümleye kattığı zaman ve durum anlamlarını çöz.",
+                "Büyük final: Şebekenin liderinin saklandığı ana karargahtasın. Tüm bilgi birikimini kullanarak en karmaşık ve zorlu fiilimsi bulmacasını çöz!"
+            ];
+
+            return {
+                id: chNum,
+                title: `Dosya #${chNum}: Kritik Soruşturma`,
+                hint: hints[i % hints.length],
+                secret: `GİZLİ-DOSYA-KODU-${chNum}-ONAYLANDI`,
+                cases: [
+                    {
+                        text: "Bahçede sararmış yaprakları temizleyen görevli, dünkü olayı görmediğini iddia etti.",
+                        tokens: [
+                            {word: "Bahçede", isTarget: false},
+                            {word: "sararmış", isTarget: true, type: "sıfat-fiil"},
+                            {word: "yaprakları", isTarget: false},
+                            {word: "temizleyen", isTarget: true, type: "sıfat-fiil"},
+                            {word: "görevli,", isTarget: true, type: "sıfat-fiil"},
+                            {word: "dünkü", isTarget: false},
+                            {word: "olayı", isTarget: false},
+                            {word: "görmediğini", isTarget: true, type: "sıfat-fiil"},
+                            {word: "iddia", isTarget: false},
+                            {word: "etti.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Eve gelir gelmez ellerini sabunlayıp masaya oturdu ve hiç durmadan konuştu.",
+                        tokens: [
+                            {word: "Eve", isTarget: false},
+                            {word: "gelir", isTarget: true, type: "zarf-fiil"},
+                            {word: "gelmez", isTarget: true, type: "zarf-fiil"},
+                            {word: "ellerini", isTarget: false},
+                            {word: "sabunlayıp", isTarget: true, type: "zarf-fiil"},
+                            {word: "masaya", isTarget: false},
+                            {word: "oturdu", isTarget: false},
+                            {word: "ve", isTarget: false},
+                            {word: "hiç", isTarget: false},
+                            {word: "durmadan", isTarget: true, type: "zarf-fiil"},
+                            {word: "konuştu.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Sabah spor yapmak ve yürüyüş düzenlemek sağlığımız için oldukça faydalıdır.",
+                        tokens: [
+                            {word: "Sabah", isTarget: false},
+                            {word: "spor", isTarget: false},
+                            {word: "yapmak", isTarget: true, type: "isim-fiil"},
+                            {word: "ve", isTarget: false},
+                            {word: "yürüyüş", isTarget: false},
+                            {word: "düzenlemek", isTarget: true, type: "isim-fiil"},
+                            {word: "sağlığımız", isTarget: false},
+                            {word: "için", isTarget: false},
+                            {word: "oldukça", isTarget: true, type: "zarf-fiil"},
+                            {word: "faydalıdır.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Görünmez kazalardan kaçınmak istiyorsan kurallara kesinlikle uymalısın.",
+                        tokens: [
+                            {word: "Görünmez", isTarget: true, type: "sıfat-fiil"},
+                            {word: "kazalardan", isTarget: false},
+                            {word: "kaçınmak", isTarget: true, type: "isim-fiil"},
+                            {word: "istiyorsan", isTarget: false},
+                            {word: "kurallara", isTarget: false},
+                            {word: "kesinlikle", isTarget: false},
+                            {word: "uymalısın.", isTarget: false}
+                        ]
+                    },
+                    {
+                        text: "Güneş batarken sahilde yürüyen çocuklar neşeyle şarkı söylüyordu.",
+                        tokens: [
+                            {word: "Güneş", isTarget: false},
+                            {word: "batarken", isTarget: true, type: "zarf-fiil"},
+                            {word: "sahilde", isTarget: false},
+                            {word: "yürüyen", isTarget: true, type: "sıfat-fiil"},
+                            {word: "çocuklar", isTarget: false},
+                            {word: "neşeyle", isTarget: false},
+                            {word: "şarkı", isTarget: false},
+                            {word: "söylüyordu.", isTarget: false}
+                        ]
+                    }
+                ]
+            };
+        });
+
+        window.onload = function() {
+            if (currentUser) {
+                document.getElementById('screen-login').classList.add('hidden');
+                document.getElementById('screen-menu').classList.remove('hidden');
+                document.getElementById('display-nickname').innerText = currentUser;
+                renderChapters();
+            }
+        };
+
+        function saveNickname() {
+            const val = document.getElementById('nickname-input').value.trim();
+            if (!val) {
+                alert("Lütfen geçerli bir dedektif adı girin!");
+                return;
+            }
+            currentUser = val;
+            localStorage.setItem("fiilimsi_nickname", currentUser);
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-menu').classList.remove('hidden');
+            document.getElementById('display-nickname').innerText = currentUser;
+            renderChapters();
+        }
+
+        function resetUser() {
+            localStorage.removeItem("fiilimsi_nickname");
+            currentUser = "";
+            document.getElementById('screen-menu').classList.add('hidden');
+            document.getElementById('screen-login').classList.remove('hidden');
+        }
+
+        function renderChapters() {
+            const grid = document.getElementById('chapters-grid');
+            grid.innerHTML = "";
+            const maxUnlocked = getMaxUnlockedChapter();
+
+            chapterData.forEach(ch => {
+                const isUnlocked = ch.id <= maxUnlocked;
+                const btn = document.createElement('button');
+                
+                if (isUnlocked) {
+                    btn.className = "p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left transition flex flex-col justify-between group";
+                    btn.innerHTML = `
+                        <div>
+                            <span class="text-xs text-amber-400 font-bold block mb-1">DOSYA #${ch.id}</span>
+                            <span class="text-sm font-semibold text-white group-hover:text-amber-300">Açık Dosya</span>
+                        </div>
+                        <span class="text-xs text-emerald-400 mt-3 block font-medium">İncele ▶</span>
+                    `;
+                    btn.onclick = () => openBriefing(ch.id);
+                } else {
+                    btn.className = "p-4 bg-slate-900/50 border border-slate-800 rounded-xl text-left opacity-50 cursor-not-allowed flex flex-col justify-between";
+                    btn.innerHTML = `
+                        <div>
+                            <span class="text-xs text-slate-500 font-bold block mb-1">DOSYA #${ch.id}</span>
+                            <span class="text-sm font-semibold text-slate-500">Kilitli</span>
+                        </div>
+                        <span class="text-xs text-rose-400 mt-3 block font-medium">🔒 Önceki Dosya Şart</span>
+                    `;
+                }
+                grid.appendChild(btn);
+            });
+        }
+
+        function openBriefing(chId) {
+            const maxUnlocked = getMaxUnlockedChapter();
+            if (chId > maxUnlocked) {
+                alert("Bu dosya kilitli! Önceki dosyaları tamamlamalısınız.");
+                return;
+            }
+            selectedChapterForPlay = chId;
+            const ch = chapterData.find(c => c.id === chId);
+
+            document.getElementById('screen-menu').classList.add('hidden');
+            document.getElementById('screen-briefing').classList.remove('hidden');
+            document.getElementById('briefing-ch-num').innerText = `DOSYA #${chId} İSTİHBARAT RAPORU`;
+            document.getElementById('briefing-title').innerText = ch.title;
+            document.getElementById('briefing-hint-text').innerText = `"${ch.hint}"`;
+        }
+
+        function backToMenu() {
+            document.getElementById('screen-briefing').classList.add('hidden');
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-menu').classList.remove('hidden');
+            renderChapters();
+        }
+
+        function proceedToDifficulty() {
+            currentChapter = selectedChapterForPlay;
+            currentCaseIndex = 0;
+            document.getElementById('screen-briefing').classList.add('hidden');
+            document.getElementById('screen-game').classList.remove('hidden');
+            document.getElementById('chapter-title').innerText = `Dosya #${currentChapter} - Soruşturma Masası`;
+            document.getElementById('difficulty-selector').classList.remove('hidden');
+            document.getElementById('game-arena').classList.add('hidden');
+        }
+
+        function backToBriefing() {
+            clearInterval(timerInterval);
+            openBriefing(currentChapter);
+        }
+
+        function startGameMode(mode) {
+            currentDifficulty = mode;
+            if (mode === 'kolay') timeLeft = 50;
+            else if (mode === 'orta') timeLeft = 35;
+            else if (mode === 'zor') timeLeft = 18;
+
+            document.getElementById('difficulty-selector').classList.add('hidden');
+            document.getElementById('game-arena').classList.remove('hidden');
+            loadCase();
+        }
+
+        function loadCase() {
+            clearInterval(timerInterval);
+            const ch = chapterData.find(c => c.id === currentChapter);
+            if (currentCaseIndex >= ch.cases.length) {
+                alert(`Tebrikler Dedektif ${currentUser}! Dosya #${currentChapter} başarıyla çözüldü!`);
+                unlockNextChapter(currentChapter);
+                saveScoreToCloud(currentUser, currentChapter * 100);
+                backToMenu();
+                return;
+            }
+
+            currentCaseData = ch.cases[currentCaseIndex];
+            foundCount = 0;
+            requiredCount = currentCaseData.tokens.filter(t => t.isTarget).length;
+
+            document.getElementById('case-counter').innerText = `${currentCaseIndex + 1} / ${ch.cases.length}`;
+            document.getElementById('lives-counter').innerText = '❤️❤️❤️';
+            document.getElementById('target-info').innerText = `Hedef: ${requiredCount} Fiilimsi Bul`;
+            document.getElementById('feedback-box').innerText = '';
+            document.getElementById('secret-reveal').classList.add('hidden');
+
+            lives = 3;
+            renderSentence();
+            startTimer();
+        }
+
+        function renderSentence() {
+            const box = document.getElementById('sentence-box');
+            box.innerHTML = '';
+            currentCaseData.tokens.forEach((token) => {
+                const span = document.createElement('span');
+                span.className = "word-token px-3 py-1.5 bg-slate-800 text-slate-100 rounded-lg border border-slate-700 text-base font-medium";
+                span.innerText = token.word;
+                span.onclick = () => handleTokenClick(token, span);
+                box.appendChild(span);
+            });
+        }
+
+        function startTimer() {
+            const display = document.getElementById('timer-display');
+            display.innerText = timeLeft + 's';
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                display.innerText = timeLeft + 's';
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleWrongClick("Süre bitti! Delil karartıldı.");
+                }
+            }, 1000);
+        }
+
+        function handleTokenClick(token, element) {
+            if (element.classList.contains('clicked')) return;
+
+            if (token.isTarget) {
+                element.classList.remove('bg-slate-800', 'border-slate-700');
+                element.classList.add('bg-emerald-600', 'border-emerald-400', 'text-white', 'clicked');
+                foundCount++;
+                document.getElementById('feedback-box').innerHTML = `<span class="text-emerald-400">Doğru delil yakalandı! (${token.type})</span>`;
+                
+                if (foundCount === requiredCount) {
+                    clearInterval(timerInterval);
+                    document.getElementById('feedback-box').innerHTML = `<span class="text-emerald-400 font-bold">Harika! Bu mini vaka aydınlatıldı. Sonraki aşamaya geçiliyor...</span>`;
+                    
+                    setTimeout(() => {
+                        currentCaseIndex++;
+                        if (currentCaseIndex % 3 === 0) {
+                            document.getElementById('secret-reveal').classList.remove('hidden');
+                            document.getElementById('secret-text').innerText = `GİZLİ PARÇA #${currentCaseIndex}: ${chapterData[currentChapter-1].secret.substring(0, 16)}...`;
+                        }
+                        loadCase();
+                    }, 1400);
+                }
+            } else {
+                element.classList.add('bg-rose-600', 'border-rose-400', 'clicked');
+                lives--;
+                updateLivesUI();
+                document.getElementById('feedback-box').innerHTML = `<span class="text-rose-400">Yanlış seçim! Bu sözcük fiilimsi değil.</span>`;
+                if (lives <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Canlar tükendi! Soruşturma başarısız oldu.");
+                    backToMenu();
+                }
+            }
+        }
+
+        function handleWrongClick(msg) {
+            lives--;
+            updateLivesUI();
+            document.getElementById('feedback-box').innerHTML = `<span class="text-rose-400">${msg}</span>`;
+            if (lives <= 0) {
+                alert("Soruşturma başarısız!");
+                backToMenu();
+            } else {
+                timeLeft = currentDifficulty === 'kolay' ? 50 : (currentDifficulty === 'orta' ? 35 : 18);
+                startTimer();
+            }
+        }
+
+        function updateLivesUI() {
+            let hearts = "";
+            for(let i=0; i<lives; i++) hearts += "❤️";
+            document.getElementById('lives-counter').innerText = hearts || "🖤";
+        }
+
+        const SUPABASE_URL = "https://your-project-id.supabase.co";
+        const SUPABASE_KEY = "your-public-anon-key";
+
+        async function saveScoreToCloud(name, score) {
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/leaderboard`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`
+                    },
+                    body: JSON.stringify({ name, score, created_at: new Date() })
+                });
+            } catch (e) {
+                console.log("Bulut kayıt hatası:", e);
+            }
+        }
+
+        async function openLeaderboard() {
+            document.getElementById('modal-leaderboard').classList.remove('hidden');
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = `<p class="text-center text-slate-400 py-6">Gerçek zamanlı skorlar yükleniyor...</p>`;
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard?select=*&order=score.desc&limit=10`, {
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                const data = await res.json();
+                
+                if (data && data.length > 0) {
+                    list.innerHTML = "";
+                    data.forEach((item, idx) => {
+                        const row = document.createElement('div');
+                        row.className = "flex justify-between items-center bg-slate-800 p-3 rounded-xl border border-slate-700";
+                        row.innerHTML = `
+                            <div class="flex items-center gap-3">
+                                <span class="font-bold text-amber-400">#${idx + 1}</span>
+                                <span class="font-semibold text-white">${item.name}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-emerald-400 font-bold">${item.score} Puan</span>
+                            </div>
+                        `;
+                        list.appendChild(row);
+                    });
+                } else {
+                    list.innerHTML = `<p class="text-center text-slate-400 py-6">Henüz çevrim içi skor kaydedilmedi.</p>`;
+                }
+            } catch (e) {
+                list.innerHTML = `<p class="text-center text-rose-400 py-6">Sunucuya bağlanılamadı. (Demo Modu)</p>`;
+            }
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('modal-leaderboard').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
